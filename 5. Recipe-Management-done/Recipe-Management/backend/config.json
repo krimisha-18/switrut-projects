@@ -1,0 +1,3 @@
+{
+    "connectionString" : "mongodb+srv://krimisha025:krimisha025@cluster0.iu4v3.mongodb.net/Recipe-management?retryWrites=true&w=majority&appName=Cluster0"
+}

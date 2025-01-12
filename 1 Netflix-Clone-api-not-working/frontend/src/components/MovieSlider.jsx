@@ -12,19 +12,21 @@ const MovieSlider = ({ category }) => {
 
 	const sliderRef = useRef(null);
 
+	// Format category name and content type
 	const formattedCategoryName =
 		category.replaceAll("_", " ")[0].toUpperCase() + category.replaceAll("_", " ").slice(1);
 	const formattedContentType = contentType === "movie" ? "Movies" : "TV Shows";
 
+	// Fetch content when component mounts or category/contentType changes
 	useEffect(() => {
 		const getContent = async () => {
 			const res = await axios.get(`/api/v1/${contentType}/${category}`);
 			setContent(res.data.content);
 		};
-
 		getContent();
 	}, [contentType, category]);
 
+	// Functions to scroll the slider left and right
 	const scrollLeft = () => {
 		if (sliderRef.current) {
 			sliderRef.current.scrollBy({ left: -sliderRef.current.offsetWidth, behavior: "smooth" });
@@ -37,14 +39,18 @@ const MovieSlider = ({ category }) => {
 	return (
 		<div
 			className='bg-black text-white relative px-5 md:px-20'
+			// Show arrows when mouse is over the slider
 			onMouseEnter={() => setShowArrows(true)}
 			onMouseLeave={() => setShowArrows(false)}
 		>
+			{/* Category Title */}
 			<h2 className='mb-4 text-2xl font-bold'>
 				{formattedCategoryName} {formattedContentType}
 			</h2>
 
+			{/* Slider container */}
 			<div className='flex space-x-4 overflow-x-scroll scrollbar-hide' ref={sliderRef}>
+				{/* Map through content and display items */}
 				{content.map((item) => (
 					<Link to={`/watch/${item.id}`} className='min-w-[250px] relative group' key={item.id}>
 						<div className='rounded-lg overflow-hidden'>
@@ -59,12 +65,12 @@ const MovieSlider = ({ category }) => {
 				))}
 			</div>
 
+			{/* Show left and right arrows */}
 			{showArrows && (
 				<>
 					<button
 						className='absolute top-1/2 -translate-y-1/2 left-5 md:left-24 flex items-center justify-center
-            size-12 rounded-full bg-black bg-opacity-50 hover:bg-opacity-75 text-white z-10
-            '
+            size-12 rounded-full bg-black bg-opacity-50 hover:bg-opacity-75 text-white z-10'
 						onClick={scrollLeft}
 					>
 						<ChevronLeft size={24} />
@@ -72,8 +78,7 @@ const MovieSlider = ({ category }) => {
 
 					<button
 						className='absolute top-1/2 -translate-y-1/2 right-5 md:right-24 flex items-center justify-center
-            size-12 rounded-full bg-black bg-opacity-50 hover:bg-opacity-75 text-white z-10
-            '
+            size-12 rounded-full bg-black bg-opacity-50 hover:bg-opacity-75 text-white z-10'
 						onClick={scrollRight}
 					>
 						<ChevronRight size={24} />
@@ -83,4 +88,5 @@ const MovieSlider = ({ category }) => {
 		</div>
 	);
 };
+
 export default MovieSlider;
